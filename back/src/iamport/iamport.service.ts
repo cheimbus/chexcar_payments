@@ -181,8 +181,8 @@ export class IamportService {
 
     public getIamportAccessToken() {
         const data = {
-            imp_key: this.configService.get('REST_API_KEY'),
-            imp_secret: this.configService.get('REST_API_SECRET'),
+            imp_key: '2171316626041773',
+            imp_secret: 'pU3inQFRvQpjmW1Aq5mnW4Tjf9gzZV0WHVXFmXM2D0O1OWcY77AuazO0qxiAYUsx9oa1YJHYPAyk2Upa',
         }
         return this.httpService
             .post('https://api.iamport.kr/users/getToken', data, {
