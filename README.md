@@ -5,8 +5,8 @@
 ## 2. 프로젝트 환경
   - `NestJS v9.1.2`
   - `MySQL v8.028`
-  - `Node v16.17.0`
-  - `npm v8.15.0`
+  - `Node v14.17.1`
+  - `npm v6.14.13`
   - `TypeORM v0.311`
   - `React`
 ## 3. API
