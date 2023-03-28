@@ -10,8 +10,8 @@ const CanclePay = () => {
         "Content-Type": "application/json",
       },
       data: {
-        email: 'exam@google.com',
-        merchantUid: `ORD20180131-0000205`
+        email: "exam@google.com",
+        merchant_uid: `2023-03-28T09:39:30.031Z`,
       },
     })
       .then(() => {

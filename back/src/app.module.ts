@@ -2,20 +2,16 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Payments } from './iamport/entities/Payment.entity';
-import { PaymentLogs } from './iamport/entities/PaymentLog.entity';
-import { IamportController } from './iamport/iamport.controller';
-import { IamportModule } from './iamport/iamport.module';
-import { IamportService } from './iamport/iamport.service';
-import { Memberships } from './membership/entities/Membership.entity';
-import { MembershipController } from './membership/membership.controller';
-import { MembershipModule } from './membership/membership.module';
-import { MembershipService } from './membership/membership.service';
+import { Payments } from './portone/entities/Payment.entity';
+import { PaymentLogs } from './portone/entities/PaymentLog.entity';
+import { IamportController } from './portone/iamport.controller';
+import { IamportModule } from './portone/iamport.module';
+import { IamportService } from './portone/iamport.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forFeature([Payments, PaymentLogs, Memberships]),
+    TypeOrmModule.forFeature([Payments, PaymentLogs]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -24,14 +20,16 @@ import { MembershipService } from './membership/membership.service';
         host: 'localhost',
         port: 3306,
         username: 'root',
-        password: '123123123',
+        password: 'a!950403',
         database: 'exam',
         entities: ['dist/**/*.entity{.d.ts,.js}', '**/*.entity{.d.ts,.js}'],
         synchronize: false,
       }),
     }),
-    IamportModule, HttpModule, MembershipModule,],
-  controllers: [IamportController, MembershipController],
-  providers: [IamportService, MembershipService],
+    IamportModule,
+    HttpModule,
+  ],
+  controllers: [IamportController],
+  providers: [IamportService],
 })
-export class AppModule { }
+export class AppModule {}

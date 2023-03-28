@@ -17,14 +17,14 @@ const Payment = () => {
 
   const onClickPayment = () => {
     const { IMP } = window;
-    IMP.init("imp70001852");
+    IMP.init("imp55161168");
     const data = {
-      pg: "eximbay.1849705C64",
+      pg: "eximbay",
       pay_method: "card",
-      merchant_uid: `ORD20180131-0000209d9`,
-      name: "마스크",
-      amount: 100,
-      buyer_email: "dfasfasdf33332413s@gmail.com",
+      merchant_uid: new Date(),
+      name: "탁송비",
+      amount: 50000,
+      buyer_email: "exam950403@gmail.com",
       buyer_name: "황시우",
       buyer_tel: "010-1234-5678",
       buyer_addr: "서울특별시 강남구 압구정동",
@@ -34,21 +34,18 @@ const Payment = () => {
   };
 
   const callback = (response) => {
-    const { success, error_msg, imp_uid, merchant_uid } = response;
+    const { success, error_msg, imp_uid, merchant_uid, name } = response;
     if (success) {
       axios({
         url: "http://localhost:8080/payments/complete",
         method: "post",
         headers: { "Content-Type": "application/json" },
         data: {
-          impUid:imp_uid,
-          merchantUid:merchant_uid,
-          remains:10,
-          type:10,
-          device:'pc',
-          email:'exam6@google.com',
-          amount:100,
-          name:'마우스',
+          imp_uid: imp_uid,
+          merchant_uid: merchant_uid,
+          request_amount: 50000,
+          email: "exam950403@gmail.com",
+          name,
         },
       }).then(() => {
         alert(`결제를 성공하였습니다.`);
