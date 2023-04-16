@@ -10,6 +10,17 @@ import { PaymentLogs } from './entities/PaymentLog.entity';
 export class IamportService {
   constructor(private httpService: HttpService) {}
 
+  /**
+   * @function paymentComplete 결제 완료에 대한 비즈니스로직을 담당하는 함수이다.
+   * @function getIamportPaymentData 포트원에서 실제 결제완료된 데이터를 가져오는 함수이다.
+   * @function refund 포트원에 해당 상품고유번호 merchant_uid를 이용해서 accesstoken과 함께 환불 요청하는 로직을 담당하는 함수이다.
+   * @function getIamportAccessToken 포트원에서 제공하는 imp_key와 imp_secret을 이용해서 accesstoken을 가져오기 위한 함수이다.
+   * @param data PaymentCompleteDto interface에 맞는 값
+   * @retruns 성공시 { statusCode: 200, message: 'success' }
+     실패시 {statusCode: 400, message: 'Please do it again.',error: 'Bad Request'} => 결제 고유번호인 imp_uid값이 존재하지 않을 때
+     {statusCode: 400, message: 'fake payment attempt.', error: 'Bad Request'} => 결제 요청시 프론트단에서 받아온 가격과 실제 결제된 내역(포트원에서 결제된 내역)을
+     비교해서 맞지 않을 시 리턴되는 값이다. 왜 비교를 하냐면, 해커가 해당 결제 내용의 스크립트를 변경해서 요청하면 문제가 발생하기 때문이다. (ex 만원결제를 100원으로 변경해서 결제요청)
+   */
   public async paymentComplete(data: PaymentCompleteDto) {
     const queryRunner = dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -75,7 +86,13 @@ export class IamportService {
     }
   }
 
-  // 환불
+  /**
+   * @function paymentCancel 결제 환불 로직을 처리하기 위한 함수이다.
+   * @param data PaymentCancel interface에 맞는 값
+   * @returns 성공시 { statusCode: 200, message: 'payment cancel is completed!' }
+     실패시 {statusCode: 400, message: 'imp_uid does not exist, so cant be accessed.', error: 'Bad Request'} => 결제 고유번호인 imp_uid를 받아오지 못했을 때 발생한다.
+     {statusCode: 400, message: 'There is no refundable product.', error: 'Bad Request'} => 환불 진행이 끝나고, 다시 환불요청을 보낼 때 중복되지 않기위해 amount가 0인 경우 발생하는 에러이다.
+   */
   public async paymentCancel(data: PaymentCancel) {
     const queryRunner = dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -113,6 +130,7 @@ export class IamportService {
       });
 
       await queryRunner.commitTransaction();
+      return { statusCode: 200, message: 'payment cancel is completed!' };
     } catch (err) {
       await queryRunner.rollbackTransaction();
     } finally {
